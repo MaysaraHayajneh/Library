@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Controllers
 {
+	/// <summary>
+	/// commidhskjhfks
+	/// </summary>
 	public class  AccountController : Controller
 	{
 		private readonly SignInManager<ApplicationUser> _signInManager;
