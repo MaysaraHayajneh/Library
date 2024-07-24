@@ -1,0 +1,72 @@
+﻿ @model List<Shelf>
+@inject IStringLocalizer<SharedResource> localizer
+
+@{
+    var Culture = CultureInfo.CurrentCulture.Name;
+}
+
+<partial name="_Notifications"></partial>
+<div class="text-center">
+    <h1 class="display-4">@localizer["Welcome To Library"]</h1>
+</div>
+<div class="row">
+    <div class="col-12  text-end">
+        <a asp-action="ShowBooksAvalizableInChart" asp-controller="Home" class="btn btn-primary">Books Avaliable Per Category</a>
+    </div>
+
+</div>
+<div class="container">
+    
+        <table id="shelftablehome" class=" table table-striped table-bordered mt-4">
+            <thead>
+                <tr class="table-secondary">
+                    <th scope="col" class="text-center fw-bold">#</th>
+                    <th scope="col" class="text-center fw-bold">@localizer["Shelf Name"]</th>
+                    <th scope="col" class="text-center fw-bold">@localizer["Count"]</th>
+                    <th scope="col" class="text-center fw-bold">@localizer["IsAvalible"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var x = 1;
+                }
+                @foreach (var shelf in Model)
+                {
+
+                  <tr>
+                    <td scope="row" class="text-center align-content-center ">
+                      <a class="text-decoration-none btn btn-link @(shelf.IsAvalible==false?"disabled":"")" asp-controller="Home" asp-action="DisplayBook" asp-route-ShelfId="@shelf.Id">@localizer["Shelf"] @(x++)</a>
+                    </td>
+                    <td class="text-center align-content-center">
+                            @(Culture == "ar-JO" ? shelf.ArabicName : Culture == "fr-CA" ? shelf.FrenchName : shelf.EnglishName)
+                    </td>
+                    <td class="text-center align-content-center">
+                            @shelf.BookCount
+                    </td>
+                    <td class="text-center align-content-center">
+                        @{
+                            if (shelf.IsAvalible)
+                            {
+                                <i class="bi bi-check2" style="color:blue;"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-lg" style="color:red;"></i>
+                               
+                            }
+
+                         }
+                       
+                    </td>
+                    
+                  </tr>
+                }
+            </tbody> 
+        </table>
+    
+</div>
+
+      
+
+
+

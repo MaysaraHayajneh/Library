@@ -1,0 +1,15 @@
+﻿
+@inject IOptions<RequestLocalizationOptions> localoption
+@inject IViewLocalizer localizer
+@{
+	var Culture = CultureInfo.CurrentCulture.Name;
+	var CultureList = localoption?.Value?.SupportedUICultures?.Select(o => new SelectListItem {Value=o.Name,Text=localizer.GetString(o.Name)}).ToList();
+	var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
+}
+
+<div>
+	<form method="post" asp-controller="Shelf" asp-action="CulturManagement" asp-route-returnURl="@returnUrl">
+		<select name="Culture" asp-for="@Culture" asp-items="CultureList" onchange="this.form.submit()">
+		</select>
+	</form>
+</div>

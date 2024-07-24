@@ -1,0 +1,72 @@
+﻿@model List<Shelf>
+@inject IViewLocalizer localizer
+
+@{
+    var Culture = CultureInfo.CurrentCulture.Name;
+}
+
+<partial name="_Notifications"></partial>
+<div class="text-center">
+    <h1 class="display-4">@localizer["Welcome To Library"]</h1>
+    
+</div>
+    <div class="row">
+    <div class="col-12 text-end">
+        <a asp-controller="Shelf" asp-action="Add" class="btn btn-outline-primary">@localizer["Add Shielf"]</a>
+    </div>
+    </div>
+    <div class="row justify-content-center ">
+      <div class="col-lg-7">
+        <table id="shelvestable" class=" table table-borderedless">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center fw-bold">#</th>
+                    <th scope="col" class="text-center fw-bold">@localizer["Shelf Name"]</th>
+                    <th scope="col" class="text-center fw-bold">@localizer["IsAvaliable"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var x = 1;
+                }
+                @foreach (var shelf in Model)
+                {
+                   
+                    <tr >
+                        <td scope="row" class="text-center align-content-center">
+                            <a class="text-decoration-none" asp-controller="Book" asp-action="Index" asp-route-ShelfId="@shelf.Id">@localizer["Shelf"] @(x++)</a>
+                        </td>
+                        <td class="text-center align-content-center">
+                            @(Culture=="ar-JO"?shelf.ArabicName:Culture=="fr-CA"?shelf.FrenchName:shelf.EnglishName)
+                        </td>
+                         <td class="text-center align-content-center">
+                            @{
+                                if (shelf.IsAvalible)
+                                {
+                                    <i class="bi bi-check2" style="color:blue;"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-x-lg" style="color:red;"></i>
+                                }
+                            }
+                            
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group text-center align-content-center " role="group">
+
+                                <a asp-controller="Shelf" asp-action="Edit" asp-route-Id="@shelf.Id" class="btn btn-link ">@localizer["Edit"]</a>
+                                <a asp-controller="Shelf" asp-action="Delete" asp-route-Id="@shelf.Id" class="btn btn-link text-danger  " >@localizer["Delete"]</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+      </div>
+ 
+  </div>
+  
+   

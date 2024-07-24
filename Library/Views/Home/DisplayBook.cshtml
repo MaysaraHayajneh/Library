@@ -1,0 +1,44 @@
+﻿@model List<Book>
+@inject IStringLocalizer<SharedResource> localizer
+@{
+    var Culture = CultureInfo.CurrentCulture.Name;
+}
+<partial name="_Notifications"></partial>
+
+<div class="row pb-3">
+    <div class="col-2 pt-4">
+        <a class="btn btn-secondary w-15" asp-controller="Home" asp-action="Index">@localizer["Back"]</a>
+    </div>
+    <div class="text-center text-primary pb-5">
+        <h1>@(Culture == "ar-JO" ? Model[0].shelf.ArabicName : Culture == "fr-CA" ? Model[0].shelf.FrenchName : Model[0].shelf.EnglishName)</h1>
+    </div>
+    @foreach (Book book in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                        <img src="@book.Image" class="card-img-top rounded mx-auto" />
+                        <div class="card-body pb-0">
+                            <div class="pl-1">
+                                <p class="card-title h5 text-dark opacity-70 fw-bold text-uppercase text-center"> @(Culture == "ar-JO" ? book.ArabicName : Culture == "fr-CA" ? book.FrenchName : book.Name)</p>
+                                <p class="card-title h6 text-dark opacity-70  text-center">Author: @book.Author</p>
+                                <p class="card-title h6 opacity-70 text-center text-success fw-bold">@localizer["Price"]: @book.price.ToString("C")</p>
+                            </div>
+                            <div>
+                                <a asp-controller="Home" asp-action="downloadPdf" asp-route-Id="@book.Id" class="btn btn-primary bg-gradient border-0 form-control">@localizer["Download Pdf"]</a>
+                                <span class="text-danger">@ViewData["message"]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    }
+
+</div>

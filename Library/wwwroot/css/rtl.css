@@ -1,0 +1,10 @@
+﻿body {
+    direction: rtl;
+    text-align: right;
+    
+}
+nav, .container, .footer {
+    direction: rtl;
+}
+
+

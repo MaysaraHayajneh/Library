@@ -1,0 +1,87 @@
+﻿
+
+@model List<Book>
+@inject IStringLocalizer<SharedResource> localizer;
+
+@{
+    var Culture = CultureInfo.CurrentCulture.Name;
+}
+
+<partial name="_Notifications"></partial>
+<div class="text-center">
+    <h1 class="display-4">@localizer["Avaliable Books"]</h1>
+</div>
+
+<div class="container row">
+    <div class="col- text-end">
+        <a class="btn btn-secondary text-primary mx-2" asp-controller="Shelf" asp-action="Index">@localizer["Back To Shelves"]</a>
+        <a asp-controller="Book" asp-action="Add" asp-route-shelfId="@(ViewBag.hasShelfId!=null?@Model[0].ShelfId:"")" class="btn btn-outline-primary"> @localizer["Add Book"]</a>
+    </div>
+
+</div>
+
+<div class="text-center text-primary ">
+    <h1 class="text-center"> @(ViewBag.hasShelfId != null? (Culture == "ar-JO" ? Model[0].shelf.ArabicName : Culture == "fr-CA" ? Model[0].shelf.FrenchName : Model[0].shelf.EnglishName):"")</h1>
+</div>
+   
+    <div class="row justify-content-center pt-5 ">
+      <div class="col">
+        <table id="BooksTable" class=" table table-borderedless">
+            <thead>
+                <tr>
+                    <th class="text-center fw-bold">#</th>
+                    <th scope="col" class="text-center fw-bold">@localizer["Books"]</th>
+                    @if (ViewBag.hasShelfId == null)
+                    {
+                        <th class="text-center fw-bold">@localizer["Shelfs"]</th>
+                    }
+                    <th scope="col" class="text-center fw-bold">@localizer["Author"]</th>
+                    
+                    <th scope="col" class="text-center fw-bold">@localizer["Price"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+      @*    <tbody>
+                
+                @for ( int i=1; i<=Model.Count;i++)
+                {
+
+                    <tr >
+                        <td class="text-center text-primary p-3 fw-bold">
+                            @(i)
+                        </td>
+                        <td class="text-center align-content-center">
+                            @(Culture == "ar-JO" ? Model[i-1].ArabicName : Culture == "fr-CA" ? Model[i-1].FrenchName : Model[i-1].Name)
+                        </td>
+                        @if (ViewBag.hasShelfId == null)
+                        {
+                            <td class="text-center align-content-center"> @(Culture == "ar-JO" ? Model[i - 1].shelf.ArabicName : Culture == "fr-CA" ? Model[i - 1].shelf.FrenchName : Model[i - 1].shelf.EnglishName)</td>
+                        }
+                        <td class="text-center align-content-center">
+                            @Model[i-1].Author
+                        </td>
+
+                        <td class="text-center align-content-center">
+                            @Model[i-1].price.ToString("C")
+                        </td>
+                        
+                        <td class="text-center">
+                            <div class="btn-group text-center align-content-center " role="group">
+
+                                <a asp-controller="Book" asp-action="Edit" asp-route-Id="@Model[i-1].Id" class="btn btn-link">@localizer["Edit"]</a>
+                                <a asp-controller="Book" asp-action="Delete" asp-route-Id="@Model[i-1].Id" class="btn btn-link text-danger">@localizer["Delete"]</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>   *@
+        </table>
+      </div>
+   
+    </div>
+ 
+@section Scripts {
+    <script src="~/js/dataTable.js"></script>
+}
+

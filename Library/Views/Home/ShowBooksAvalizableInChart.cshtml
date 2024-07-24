@@ -1,0 +1,26 @@
+﻿<div class="row mb-4">
+	<div class="col-1">
+		<label>Char Type</label>
+	</div>
+	<div class="col-2">
+		<select id="CharType" class="form-control" style="width:auto;">
+			<option selected>--Select Chart Type--</option>
+			<option>bar</option>
+			<option>line</option>
+			<option>pie</option>
+			<option>doughnut</option>
+		</select>
+	</div>
+	<div class="col-4">
+		<input type="button" id="button2" value="showgraph" class="btn btn-primary" />
+
+	</div>
+</div>
+
+
+<div id="div">
+	<canvas id="myChart"></canvas>
+</div>
+<script src="//cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="~/js/char.js"></script>

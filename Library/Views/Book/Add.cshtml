@@ -1,0 +1,74 @@
+﻿
+@model Book
+@{
+    ViewData["Title"] = "Add Book";
+}
+
+@inject IStringLocalizer<SharedResource> localizer
+@{
+    var Culture = CultureInfo.CurrentCulture.Name;
+}
+
+<div class="mt-3" text-primary">
+    <h2>@localizer["Adding Book"]</h2>
+</div>
+<div class="row">
+    <form method="post" enctype="multipart/form-data">
+
+        <div class="col-md-6">
+            <label asp-for="Name"  class="form-label mt-4 fw-bold"></label>
+            <input asp-for="Name" class="form-control bg-light">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ArabicName" class="form-label mt-4 fw-bold"></label>
+            <input asp-for="ArabicName" class="form-control bg-light">
+            <span asp-validation-for="ArabicName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="FrenchName" class="form-label mt-4 fw-bold"></label>
+            <input asp-for="FrenchName" class="form-control bg-light">
+            <span asp-validation-for="FrenchName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="price" class="form-label mt-4 fw-bold"></label>
+            <input asp-for="price" class="form-control bg-light">
+            <span asp-validation-for="price" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Author" class="form-label mt-4 fw-bold"></label>
+            <input asp-for="Author" class="form-control bg-light">
+            <span asp-validation-for="Author" class="text-danger"></span>
+            
+        </div>
+
+        <div class="col-md-6" >
+            <label asp-for="shelf" class="form-label fw-bold pt-1"></label>
+            <select asp-for="ShelfId" class=" form-select bg-light" asp-items="@(Culture == "ar-JO" ? ViewBag.ShelvesList[1] : Culture == "fr-CA" ? ViewBag.ShelvesList[2] : ViewBag.ShelvesList[0])">
+                
+            </select >
+
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ImgFormFile" class="m-2 fw-bold"></label>
+           <input asp-for="ImgFormFile"  class="form-control" accept="image/*" />
+            <span asp-validation-for="ImgFormFile" class="text-danger"></span>
+        </div>
+       
+
+        <div class="col-md-6">
+            <label asp-for="pdfFormFile" class="m-2 fw-bold"></label>
+           <input asp-for="pdfFormFile"  class="form-control" accept=".pdf" />
+           <span asp-validation-for="pdfFormFile" class="text-danger"></span>
+        </div>
+       
+        <div class="col-md-6 mt-3">
+            <input type="submit" value="@localizer["Add"]" class="btn btn-primary" />
+            <a class="btn btn-outline-secondary w-auto" asp-controller="Book" asp-action="Index" >@localizer["Back"]</a>
+        </div>
+    </form>
+ </div>
+
+   @*  @section Scripts {
+        <partial name="_ValidationScriptsPartial"></partial>
+    } *@

@@ -1,0 +1,53 @@
+﻿
+@model IEnumerable<IdentityRole>
+@inject IAuthorizationService AuthorizeService
+@{
+	ViewBag.Titles = "All Roles";
+}
+
+	<h1>All Roles</h1>	
+
+
+	@if (Model.Any())
+	{
+		<a asp-controller="Admin" asp-action="CreateRole" class="btn btn-primary mb-3" style="width:auto;">Add new Role</a>
+		foreach(var role in Model)
+		{
+			<div class="card mb-3">
+				<div class="card-header">
+					Role Id: @role.Id
+				</div>
+				<div class="card-body">
+					Role Name: @role.Name
+				</div>
+				<div class="card-footer">
+				 <form asp-controller="Admin" asp-action="DeleteRole" method="post" asp-route-Id="@role.Id">
+					@if ((await AuthorizeService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
+					{
+						<a asp-controller="Admin" asp-action="EditRole" asp-route-Id="@role.Id" class="btn btn-secondary">Edit</a>
+					}
+					@if ((await AuthorizeService.AuthorizeAsync(User, "DeletRolePolicy")).Succeeded)
+					{
+						<button type="submit" onclick="return confirm('are you sure you want to delete role:@role.Name')" class="btn btn-danger">Delete</button>
+					}
+			     </form >
+	
+				</div>
+
+			</div>
+		}
+
+
+	}
+	else
+	{
+		<div class="card">
+			<div class="card-header">
+				No Roles Created Yet
+			</div>
+			<div class="card-body">
+				<h5 class="card-title mb-2">Use the button below to create a role</h5 >
+				<a asp-controller="Admin" asp-action="CreateRole" class="btn btn-primary" style="width:auto">Create Role</a>
+			</div>
+		</div>
+	}
