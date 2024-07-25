@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Services.HomeService
 {
-    internal class HomeService : IHomeService
+    public class HomeService : IHomeService
     {
 
         private readonly IShelfRepository _shelfRepository;
@@ -18,19 +18,40 @@ namespace Library.Application.Services.HomeService
             _shelfRepository = shelfRepository;
             _bookRepository = bookRepository;
         }
-        public async Task<List<Book>> GetBook(int? Id)
+
+        public async Task<Book> GetBook(int? Id)
         {
-            List<Shelf> shelves = await _shelfRepository.GetAllAsync();
+            Book book = await _bookRepository.GetAsync(o => o.Id == Id);
+            return book;
+        }
+
+        public async Task<List<object>> GetBookNameAndCount()
+        {
+            List<object> data = new List<object>();
+            var shelves = await _shelfRepository.GetAllAsync();
+
+
+            List<string> label = shelves.Select(s => s.EnglishName).ToList();
+            data.Add(label);
+            List<int> count = shelves.Select(s => s.BookCount).ToList();
+            data.Add(count);
+
+
+            return data;
         }
 
         public async Task<List<Book>> GetBooksByShelfIdService(int? ShelfId)
         {
             List<Book> books = await _bookRepository.GetAllAsync(o => o.ShelfId == ShelfId, includeProperity: "shelf"); ;
+            return books;
         }
 
         public async Task<List<Shelf>> GetShelvesService()
         {
-            Book book = await _bookRepository.GetAsync(o => o.Id == Id);
+            List<Shelf> shelves = await _shelfRepository.GetAllAsync();
+            return shelves;
         }
+
+         
     }
 }

@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Library.ApplicationLayer\Library.Application.csproj" />
+    <ProjectReference Include="..\Library.DataAccessLayer\Library.Domain.csproj" />
+    <ProjectReference Include="..\Library.Infrastructure.Persistance\Library.Infrastructure.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

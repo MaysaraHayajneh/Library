@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Formatting.Json;
-using SignalRChat.Hubs;
+using Library.Application.Services.HomeService;
 using System.Globalization;
 
 
@@ -39,6 +39,7 @@ namespace Library
             builder.Services.AddDbContext<LibraryDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IShelfRepository, ShelfRepository>();
             builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddScoped<IHomeService,HomeService>();
             //adding hangfire services
             builder.Services.AddHangfire(x=>x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddHangfireServer();
