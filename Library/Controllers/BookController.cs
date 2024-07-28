@@ -3,11 +3,13 @@ using Library.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Library.DAL.DTO;
 using Microsoft.Identity.Client;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Globalization;
+using Library.PresentationLayer.ViewModel;
 
 
 namespace Library.Controllers
@@ -29,22 +31,41 @@ namespace Library.Controllers
         {  
             
              List<Book> books = await _bookRepository.GetAllAsync(includeProperity: "shelf");
+            var booksDTO = books.Select(Books => new BookDTO()
+            {
+                Id = Books.Id,
+                Name = Books.Name,
+                FrenchName = Books.FrenchName,
+                ArabicName = Books.ArabicName,
+                Author = Books.Author,
+                price=Books.price,
+                Image = Books.Image,
+                ImgFormFile = Books.ImgFormFile,
+                pdfFileName=Books.pdfFileName,
+                shelf=Books.shelf,
+                ShelfId=Books.ShelfId,
+                pdfContent=Books.pdfContent,
+                pdfFormFile=Books.pdfFormFile,
+                
+            }).ToList();
                     
             if(ShelfId!= null)
             {
-                books=books.Where(o=>o.ShelfId==ShelfId).ToList();
-                if (books.Count == 0)
+                booksDTO=booksDTO.Where(o=>o.ShelfId==ShelfId).ToList();
+                if (booksDTO.Count == 0)
                 {
                     TempData["error"] = "there is no books in the shelf now";
                     return RedirectToAction("Index", "Shelf");
                 }
             }
             ViewBag.hasShelfId = ShelfId;            
-                   return View(books);
+                   return View(booksDTO);
 
         }
       
         public async Task <IActionResult> Add(int? shelfId)
+
+
         {      
             List<Shelf> shelves =await _shelfRepository.GetAllAsync();
             if (shelfId != null)
@@ -52,48 +73,54 @@ namespace Library.Controllers
                 shelves = shelves.Where(o => o.Id == shelfId).ToList();
             }
             
-            ViewBag.ShelvesList = new List<SelectList>()
+            List<SelectList> ShelvesList = new List<SelectList>()
             {
                 new SelectList(shelves, "Id", "EnglishName"),
                 new SelectList(shelves, "Id", "ArabicName"),
                 new SelectList(shelves, "Id", "FrenchName"),
             };
 
-            return View(new Book());  
+            BookVM bookVM = new BookVM()
+            {
+                Book = new Book(),
+                shelves=ShelvesList,
+            };
+
+            return View(bookVM);  
         }
 
         [HttpPost]
         
-        public async Task<IActionResult> Add(Book newBook)
+        public async Task<IActionResult> Add(BookVM newBook)
         {
             if (ModelState.IsValid)
             {
                 
-                if (!newBook.pdfFormFile.ContentType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase))
+                if (!newBook.Book.pdfFormFile.ContentType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     ViewBag.message = "Only pdf files allowed";
                     return View(newBook);
                 }
-               await _bookRepository.UploadImageAsync(newBook, newBook.ImgFormFile);
-               await _bookRepository.UploadPdfFileAsync(newBook, newBook.pdfFormFile);
-               await _bookRepository.AddAsync(newBook);
-                var shelf = await _shelfRepository.GetAsync(o=>o.Id==newBook.ShelfId);
+               await _bookRepository.UploadImageAsync(newBook.Book, newBook.Book.ImgFormFile);
+               await _bookRepository.UploadPdfFileAsync(newBook.Book, newBook.Book.pdfFormFile);
+               await _bookRepository.AddAsync(newBook.Book);
+                var shelf = await _shelfRepository.GetAsync(o=>o.Id==newBook.Book.ShelfId);
                 shelf.BookCount +=1;
                 await _shelfRepository.UpdateAsync(shelf);
 
-                return RedirectToAction("Index",new { ShelfId=newBook.ShelfId});
+                return RedirectToAction("Index",new { ShelfId=newBook.Book.ShelfId });
 
             } else 
             {
                
-                List<Shelf> shelves = await _shelfRepository.GetAllAsync();
-                var lookups=
-                ViewBag.ShelvesList = new List<SelectList>()
-                {
-                new SelectList(shelves, "Id", "EnglishName"),
-                new SelectList(shelves, "Id", "ArabicName"),
-                new SelectList(shelves, "Id", "FrenchName"),
-                };
+                //List<Shelf> shelves = await _shelfRepository.GetAllAsync();
+         
+                //ViewBag.ShelvesList = new List<SelectList>()
+                //{
+                //new SelectList(shelves, "Id", "EnglishName"),
+                //new SelectList(shelves, "Id", "ArabicName"),
+                //new SelectList(shelves, "Id", "FrenchName"),
+                //};
                 return View(newBook);
             };
         }
@@ -185,27 +212,45 @@ namespace Library.Controllers
             return RedirectToAction("Index", new { ShelfId = deletedBook.ShelfId });
           
         }
-        
+
 
         #region API CALLS
         [HttpGet]
 
         public async Task<IActionResult> GetAllBooks(int? ShelfId)
         {
-            
+
+
             List<Book> books = await _bookRepository.GetAllAsync(includeProperity: "shelf");
+            var booksDTO = books.Select(Books => new BookDTO()
+            {
+                Id = Books.Id,
+                Name = Books.Name,
+                FrenchName = Books.FrenchName,
+                ArabicName = Books.ArabicName,
+                Author = Books.Author,
+                price = Books.price,
+                Image = Books.Image,
+                ImgFormFile = Books.ImgFormFile,
+                pdfFileName = Books.pdfFileName,
+                shelf = Books.shelf,
+                ShelfId = Books.ShelfId,
+                pdfContent = Books.pdfContent,
+                pdfFormFile = Books.pdfFormFile,
+
+            }).ToList();
 
             if (ShelfId != null)
             {
-                books = books.Where(o => o.ShelfId == ShelfId).ToList();
-                if (books.Count == 0)
+                booksDTO = booksDTO.Where(o => o.ShelfId == ShelfId).ToList();
+                if (booksDTO.Count == 0)
                 {
                     TempData["error"] = "there is no books in the shelf now";
                     return RedirectToAction("Index", "Shelf");
                 }
             }
             ViewBag.hasShelfId = ShelfId;
-            return Json(new { data = books });
+            return Json(new { data = booksDTO });
 
         }
         #endregion

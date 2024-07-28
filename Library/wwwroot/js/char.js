@@ -19,7 +19,7 @@ $(document).ready(function () {
 
         });
        
-        function OnsuccessResult(data) {
+        function OnsuccessResult(data) { //data is the data that ajax retrive from the end point
           
             var _data = data
             

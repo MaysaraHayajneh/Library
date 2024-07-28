@@ -1,6 +1,6 @@
 ﻿
 
-@model List<Book>
+@model List<BookDTO>
 @inject IStringLocalizer<SharedResource> localizer;
 
 @{
@@ -11,7 +11,10 @@
 <div class="text-center">
     <h1 class="display-4">@localizer["Avaliable Books"]</h1>
 </div>
-
+@* i added this because of datatable just*@
+<select id="shelfid" hidden >
+    <option value="@ViewBag.hasShelfId" selected> @ViewBag.hasShelfId</option>
+</select>
 <div class="container row">
     <div class="col- text-end">
         <a class="btn btn-secondary text-primary mx-2" asp-controller="Shelf" asp-action="Index">@localizer["Back To Shelves"]</a>
@@ -23,6 +26,13 @@
 <div class="text-center text-primary ">
     <h1 class="text-center"> @(ViewBag.hasShelfId != null? (Culture == "ar-JO" ? Model[0].shelf.ArabicName : Culture == "fr-CA" ? Model[0].shelf.FrenchName : Model[0].shelf.EnglishName):"")</h1>
 </div>
+
+@*  centering cells
+ *@<style>
+     table.dataTable td, table.dataTable th {
+         text-align: center;
+     }
+</style>
    
     <div class="row justify-content-center pt-5 ">
       <div class="col">
@@ -80,6 +90,7 @@
       </div>
    
     </div>
+
  
 @section Scripts {
     <script src="~/js/dataTable.js"></script>
