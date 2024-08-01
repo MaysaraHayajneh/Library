@@ -4,7 +4,7 @@ namespace Library.ViewModel
 {
 	public class Login
 	{
-		[Required(ErrorMessage = "UserName is required")]
+		[Required(ErrorMessage = "User Name is required")]
 		public string? UserName { get; set; }
 		[DataType(DataType.Password)]
 		[Required(ErrorMessage = "Password is required")]

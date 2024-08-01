@@ -9,6 +9,7 @@ namespace Library.ViewModel
 
 		[Required(ErrorMessage = "First name is required.")]
 		[MaxLength(10)]
+		[Display(Name ="First Name")]
 		public string? FirstName { get; set; }
 		[Required(ErrorMessage = "Last name is required.")]
 		[MaxLength(10)]
@@ -16,7 +17,9 @@ namespace Library.ViewModel
 		[Required(ErrorMessage = "Password is required.")]
 		[DataType(DataType.EmailAddress)]
 		[ValidateEmailDomain(allowedDomain:"gmail.com",ErrorMessage ="the email domain should be gmail.com")]
-		[Remote(action: "IsEmailUsed",controller:"Account")]
+		
+
+		[Remote(action: "VlidateEmail",controller:"Account")]
 		public string? Email { get; set; }
 		[DataType(DataType.Password)]
 		[Required]

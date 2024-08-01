@@ -1,4 +1,5 @@
-﻿using Library.Models;
+﻿using Hangfire.States;
+using Library.Models;
 using Library.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -53,22 +54,24 @@ namespace Library.Controllers
 			return View(loginVM);
 		}
 		[AcceptVerbs("Get","Post")]
-		//allow how are not authintecated not login
+		//allow who are not authintecated not login
 		[AllowAnonymous]
-		public async Task<IActionResult> IsEmailUsed(string Email)
+		public async Task<IActionResult> VlidateEmail(string Email)
 		{
 			var result =await _user.FindByEmailAsync(Email);
-			if (result == null)
+			if (result == null&&Email.EndsWith("@gmail.com"))
 			{
 				return Json(true);
 			}
-			else
+			else if(result!=null)
 			{
 				return Json($"this {Email} is already in used");
-			}
+			}else return Json($"this {Email} domain must be @gmail.com");
 		
 		}
-		[AllowAnonymous]
+      
+       
+        [AllowAnonymous]
 		public IActionResult Register()
 		{
 			return View();

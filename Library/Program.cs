@@ -132,6 +132,7 @@ namespace Library
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
 
 			
 			app.UseRequestLocalization(app.Services.
